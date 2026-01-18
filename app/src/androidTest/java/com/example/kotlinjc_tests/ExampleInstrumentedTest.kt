@@ -1,7 +1,16 @@
 package com.example.kotlinjc_tests
 
+import androidx.compose.ui.test.assert
+import androidx.compose.ui.test.assertAll
+import androidx.compose.ui.test.assertAny
+import androidx.compose.ui.test.assertCountEquals
+import androidx.compose.ui.test.filter
+import androidx.compose.ui.test.hasAnyChild
 import androidx.compose.ui.test.junit4.createComposeRule
+import androidx.compose.ui.test.onChildren
+import androidx.compose.ui.test.onLast
 import androidx.compose.ui.test.onNodeWithTag
+import androidx.compose.ui.test.performClick
 import com.example.kotlinjc_tests.ui.theme.KotlinJCTestsTheme
 import com.example.kotlinjc_tests.views.MainScreen
 import org.junit.Test
@@ -25,6 +34,13 @@ class TestApplicationBehavior() {
         }
 
         val mainButton = composeTestRule.onNodeWithTag("main_screen_button")
+        val dataList = composeTestRule.onNodeWithTag("data_list")
+
         mainButton.assertExists()
+        mainButton.performClick()
+
+        dataList.assertExists()
+        val nodes = dataList.onChildren().fetchSemanticsNodes()
+        assert(nodes.isNotEmpty())
     }
 }
