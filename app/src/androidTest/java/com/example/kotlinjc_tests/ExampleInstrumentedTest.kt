@@ -1,14 +1,10 @@
 package com.example.kotlinjc_tests
 
 import androidx.compose.ui.test.junit4.createComposeRule
-import androidx.test.platform.app.InstrumentationRegistry
-import androidx.test.ext.junit.runners.AndroidJUnit4
+import androidx.compose.ui.test.onNodeWithTag
 import com.example.kotlinjc_tests.ui.theme.KotlinJCTestsTheme
-
+import com.example.kotlinjc_tests.views.MainScreen
 import org.junit.Test
-import org.junit.runner.RunWith
-
-import org.junit.Assert.*
 import org.junit.Rule
 
 /**
@@ -24,9 +20,11 @@ class TestApplicationBehavior() {
     fun appFlowTest() {
         composeTestRule.setContent {
             KotlinJCTestsTheme {
-
+                MainScreen()
             }
         }
 
+        val mainButton = composeTestRule.onNodeWithTag("main_screen_button")
+        mainButton.assertExists()
     }
 }
