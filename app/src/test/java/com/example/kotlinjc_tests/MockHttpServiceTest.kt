@@ -1,20 +1,19 @@
 package com.example.kotlinjc_tests
 
-import com.example.kotlinjc_tests.services.MockHttpService
-import com.example.kotlinjc_tests.utils.mockData
-import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.test.runTest
 import org.junit.Assert.assertEquals
 import org.junit.Test
+import com.example.kotlinjc_tests.services.MockHttpService
+import com.example.kotlinjc_tests.utils.mockData
 
 class MockHttpServiceTest {
 
     @Test
-    fun testMockHttpService() {
+    fun `test MockHttpService Success`() = runTest {
         val mockHttpService = MockHttpService()
-        runBlocking {
-            val data = mockHttpService.fetchData()
-            assertEquals(data, mockData)
-        }
+        val data = mockHttpService.fetchData()
+
+        assertEquals(data, mockData)
     }
 
 }
