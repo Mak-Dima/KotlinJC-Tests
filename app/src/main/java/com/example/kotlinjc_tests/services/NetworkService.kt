@@ -5,7 +5,7 @@ import kotlinx.serialization.json.Json
 
 
 interface NetworkService {
-    suspend fun fetchData(): MutableList<DataObject>
+    suspend fun fetchData(): List<DataObject>
 }
 
 class MockHttpService(
@@ -13,17 +13,17 @@ class MockHttpService(
     var throwError: Boolean = false
 ) : NetworkService {
 
-    override suspend fun fetchData(): MutableList<DataObject> {
+    override suspend fun fetchData(): List<DataObject> {
         if (throwError) {
             throw Exception("Error Message")
         }
 
-        val returnData: MutableList<DataObject>
+        val returnData: List<DataObject>
 
         if (data != null) {
             returnData = Json.decodeFromString<MutableList<DataObject>>(data!!)
         } else {
-            returnData = mutableListOf()
+            returnData = listOf()
         }
 
         return returnData
