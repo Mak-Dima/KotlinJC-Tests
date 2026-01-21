@@ -18,14 +18,6 @@ class MockHttpService(
             throw Exception("Error Message")
         }
 
-        val returnData: List<DataObject>
-
-        if (data != null) {
-            returnData = Json.decodeFromString<MutableList<DataObject>>(data!!)
-        } else {
-            returnData = listOf()
-        }
-
-        return returnData
+        return data?.let { Json.decodeFromString(it) } ?: emptyList()
     }
 }
