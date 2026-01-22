@@ -19,7 +19,6 @@ import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.tooling.preview.PreviewScreenSizes
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.example.kotlinjc_tests.utils.ViewState
 
 @Composable
 fun MainScreen() {
