@@ -7,6 +7,7 @@ import com.example.kotlinjc_tests.viewModels.DataListViewModel
 import kotlinx.coroutines.test.runTest
 import kotlinx.serialization.json.Json
 import org.junit.Test
+import kotlin.test.assertNotNull
 
 class DataListViewModelServiceTest {
 
@@ -21,5 +22,16 @@ class DataListViewModelServiceTest {
         val actualData = vm.data
         assert(actualData == mockData)
         assert(vm.state == ViewState.READY)
+    }
+
+    @Test
+    fun `Test DataListViewModel Error data loading`() = runTest {
+        val service = MockHttpService(throwError = true)
+        val vm = DataListViewModel(service)
+
+        vm.loadData()
+
+        assert(vm.state == ViewState.ERROR)
+        assertNotNull(vm.errorMsg)
     }
 }
