@@ -64,7 +64,7 @@ fun DataList(padding: PaddingValues) {
             }
         }
         ViewState.ERROR -> {
-            ErrorView("Error Message")
+            ErrorAlert("Error Message")
         }
     }
 }

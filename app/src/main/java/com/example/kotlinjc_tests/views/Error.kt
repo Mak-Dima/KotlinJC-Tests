@@ -17,7 +17,7 @@ import androidx.compose.ui.tooling.preview.PreviewScreenSizes
 import androidx.compose.ui.unit.dp
 
 @Composable
-fun ErrorView(message: String) {
+fun ErrorAlert(message: String) {
     Box(
         contentAlignment = Alignment.Center,
         modifier = Modifier
@@ -45,5 +45,5 @@ fun ErrorView(message: String) {
 @PreviewScreenSizes
 @Composable
 fun ErrorViewPreview() {
-    ErrorView("This is a longer error message that will wrap inside the constrained box.")
+    ErrorAlert("This is a longer error message that will wrap inside the constrained box.")
 }
