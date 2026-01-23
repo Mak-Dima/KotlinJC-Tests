@@ -12,6 +12,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -19,14 +20,21 @@ import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.tooling.preview.PreviewScreenSizes
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.example.kotlinjc_tests.services.HttpService
+import com.example.kotlinjc_tests.viewModels.DataListViewModel
+import kotlinx.coroutines.launch
 
 @Composable
 fun MainScreen() {
     var isLoaded by remember { mutableStateOf(false) }
+    val service = HttpService()
+    val vm = DataListViewModel(service)
+    val scope = rememberCoroutineScope()
+
 
     Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
         if (isLoaded) {
-            DataList(innerPadding)
+            DataList(innerPadding, vm)
         } else {
             Row(
                 horizontalArrangement = Arrangement.Center,
@@ -37,7 +45,12 @@ fun MainScreen() {
                     .padding(horizontal = 16.dp)
             ) {
                 FilledIconButton(
-                    onClick = { isLoaded = true },
+                    onClick = {
+                        scope.launch {
+                            vm.loadData()
+                            isLoaded = true
+                        }
+                    },
                     modifier = Modifier
                         .fillMaxWidth()
                         .testTag("main_screen_button"),

@@ -1,5 +1,6 @@
 package com.example.kotlinjc_tests.services
 
+import android.util.Log
 import android.util.Log.e
 import com.example.kotlinjc_tests.models.DataObject
 import io.ktor.client.HttpClient
@@ -27,14 +28,15 @@ class MockHttpService(
     }
 }
 
-class HttpService {
+class HttpService: NetworkService {
 
-    suspend fun fetchData(): List<DataObject> {
+    override suspend fun fetchData(): List<DataObject> {
         var data: List<DataObject> = listOf()
         val client = HttpClient(CIO)
 
         try {
-            val response = client.get("http://10.0.2.2/default/load")
+            val response = client.get("http://10.0.2.2:8080/default/read")
+            Log.e("Response", response.status.toString())
             if (response.status.value == 200) {
                 val body = response.bodyAsText()
                 data = Json.decodeFromString(body)
@@ -42,6 +44,7 @@ class HttpService {
                 throw Exception("Invalid status code")
             }
         } catch (e: Exception) {
+            Log.e("HttpService", "Error fetching data", e)
             throw e
         }
 
