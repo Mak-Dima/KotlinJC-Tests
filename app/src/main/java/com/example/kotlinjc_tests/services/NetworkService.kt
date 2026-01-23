@@ -1,6 +1,11 @@
 package com.example.kotlinjc_tests.services
 
+import android.util.Log.e
 import com.example.kotlinjc_tests.models.DataObject
+import io.ktor.client.HttpClient
+import io.ktor.client.engine.cio.CIO
+import io.ktor.client.request.get
+import io.ktor.client.statement.bodyAsText
 import kotlinx.serialization.json.Json
 
 
@@ -19,5 +24,27 @@ class MockHttpService(
         }
 
         return data?.let { Json.decodeFromString(it) } ?: emptyList()
+    }
+}
+
+class HttpService {
+
+    suspend fun fetchData(): List<DataObject> {
+        var data: List<DataObject> = listOf()
+        val client = HttpClient(CIO)
+
+        try {
+            val response = client.get("http://10.0.2.2/default/load")
+            if (response.status.value == 200) {
+                val body = response.bodyAsText()
+                data = Json.decodeFromString(body)
+            } else {
+                throw Exception("Invalid status code")
+            }
+        } catch (e: Exception) {
+            throw e
+        }
+
+        return data
     }
 }
