@@ -1,15 +1,12 @@
 package com.example.kotlinjc_tests.views
 
-import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.CircularProgressIndicator
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -20,14 +17,18 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.tooling.preview.PreviewScreenSizes
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
+import com.example.kotlinjc_tests.services.MockHttpService
 import com.example.kotlinjc_tests.utils.ViewState
+import com.example.kotlinjc_tests.utils.mockData
+import com.example.kotlinjc_tests.viewModels.DataListViewModel
+import kotlinx.serialization.json.Json
 
 @Composable
-fun DataList(padding: PaddingValues) {
-    var state by remember { mutableStateOf(ViewState.LOADING) }
-
-    when (state) {
+fun DataList(
+    padding: PaddingValues,
+    viewModel: DataListViewModel
+) {
+    when (viewModel.state) {
         ViewState.LOADING -> {
             Box(
                 contentAlignment = Alignment.Center,
@@ -43,23 +44,8 @@ fun DataList(padding: PaddingValues) {
                     .padding(horizontal = 10.dp)
                     .testTag("data_list")
             ) {
-                items(100) { index ->
-                    Row(
-                        modifier = Modifier
-                            .padding(vertical = 3.dp)
-                            .fillMaxSize()
-                            .border(
-                                1.dp,
-                                MaterialTheme.colorScheme.primary,
-                                shape = MaterialTheme.shapes.medium
-                            )
-                    ) {
-                        Text(
-                            text = "Item $index",
-                            fontSize = 20.sp,
-                            modifier = Modifier.padding(10.dp)
-                        )
-                    }
+                items (viewModel.data ?: emptyList()) { data ->
+                    DataRow(data)
                 }
             }
         }
@@ -73,5 +59,8 @@ fun DataList(padding: PaddingValues) {
 @Composable
 fun DataListPreview() {
     val padding = PaddingValues(vertical = 25.dp)
-    DataList(padding = padding)
+    val data = Json.encodeToString(mockData)
+    val service = MockHttpService(data)
+    val viewModel = DataListViewModel(service)
+    DataList(padding = padding, viewModel = viewModel)
 }
